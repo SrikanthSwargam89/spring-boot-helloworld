@@ -16,6 +16,7 @@ jobs:
         run: mvn -B test --file pom.xml
   build: 
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -32,3 +33,11 @@ jobs:
           name: spring-boot-helloworld-0.0.1-SNAPSHOT
           path: target/spring-boot-helloworld-0.0.1-SNAPSHOT.jar 
           retention-days: 1
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: spring-boot-helloworld-0.0.1-SNAPSHOT
